@@ -18,6 +18,11 @@ ctx.font = "16px Arial";
 const keyRight = 39; // right arrow
 const keyLeft = 37;  // left arrow
 
+// keydown states
+var rightPressed = false;
+var leftPressed = false;
+var anyKeyPressed = false;
+
 // Ball
 ballRadius = 10;
 // Ball centre
@@ -35,9 +40,6 @@ var paddleX = (width-paddleWidth) / 2;
 // From bottom edge
 const paddleOffsetBottom = height * 0.1;
 const paddleMove = 7;
-
-var rightPressed = false;
-var leftPressed = false;
 
 // Game info
 var score = 0;
@@ -64,30 +66,6 @@ for(c=0; c<brickColumnCount; c++) {
     }
 }
 
-// Attach event listeners to the document
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
-
-// Handle keydown event
-function keyDownHandler(e) {
-    if(e.keyCode == 39) {
-        rightPressed = true;
-    }
-    else if(e.keyCode == 37) {
-        leftPressed = true;
-    }
-}
-
-// Handle keyup event
-function keyUpHandler(e) {
-    if(e.keyCode == 39) {
-        rightPressed = false;
-    }
-    else if(e.keyCode == 37) {
-        leftPressed = false;
-    }
-}
 
 // Handle mouse movement
 function mouseMoveHandler(e) {
@@ -227,6 +205,31 @@ function gameLoop() {
     // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
     requestAnimationFrame(gameLoop);
 }
+
+// Handle keydown event
+function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+        rightPressed = true;
+    }
+    else if(e.keyCode == 37) {
+        leftPressed = true;
+    }
+}
+
+// Handle keyup event
+function keyUpHandler(e) {
+    if(e.keyCode == 39) {
+        rightPressed = false;
+    }
+    else if(e.keyCode == 37) {
+        leftPressed = false;
+    }
+}
+
+// Attach event listeners to the document
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
 // Start the game
 gameLoop();
