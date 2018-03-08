@@ -23,6 +23,9 @@ var rightPressed = false;
 var leftPressed = false;
 var anyKeyPressed = false;
 
+// Game Over
+var isGameOver = false;
+
 // Ball
 ballRadius = 10;
 // Ball centre
@@ -158,47 +161,53 @@ function movePaddle() {
 
 // Game loop
 function gameLoop() {
+    // Clear the canvas
     ctx.clearRect(0, 0, width, height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    drawScore();
-    drawLives();
-    collisionDetectionBricks();
 
-    // Game Logic - handle ball movement
-    if(ballX + dx > width-ballRadius || ballX + dx < ballRadius) {
-        dx = -dx;
-    }
-    if(ballY + dy < ballRadius) {
-        dy = -dy;
-    }
-    // Ball hits the paddle
-    else if(ballY + dy > height-ballRadius) {
-        if(ballX > paddleX && ballX < paddleX + paddleWidth) {
-            
-            dy = -dy; // reverse direction of ball
-            
+    // Play game if not over
+    if (!isGameOver) {
+        drawBricks();
+        drawBall();
+        drawPaddle();
+        drawScore();
+        drawLives();
+        collisionDetectionBricks();
+
+        // Game Logic - handle ball movement
+        if(ballX + dx > width-ballRadius || ballX + dx < ballRadius) {
+            dx = -dx;
         }
-        else {
-            lives--;
-            if(!lives) {
-                alert("GAME OVER");
-                document.location.reload();
+        if(ballY + dy < ballRadius) {
+            dy = -dy;
+        }
+        // Ball hits the paddle
+        else if(ballY + dy > height-ballRadius) {
+            if(ballX > paddleX && ballX < paddleX + paddleWidth) {
+                
+                dy = -dy; // reverse direction of ball
+                
             }
             else {
-                ballX = width/2;
-                ballY = height-30;
-                dx = 3;
-                dy = -3;
-                paddleX = (width-paddleWidth)/2;
+                lives--;
+                if(!lives) {
+                    // Game Over - show alert, then reload game (resets everything)
+                    alert("GAME OVER");
+                    document.location.reload();
+                }
+                else {
+                    ballX = width/2;
+                    ballY = height-30;
+                    dx = 3;
+                    dy = -3;
+                    paddleX = (width-paddleWidth)/2;
+                }
             }
         }
-    }
-    movePaddle();
+        movePaddle();
 
-    ballX += dx;
-    ballY += dy;
+        ballX += dx;
+        ballY += dy;
+    }
 
     // speed the animation of the game according to the device speed
     // Better alternative to setInterval()
@@ -208,6 +217,8 @@ function gameLoop() {
 
 // Handle keydown event
 function keyDownHandler(e) {
+
+    // Check if particular keys are pressed
     if(e.keyCode == 39) {
         rightPressed = true;
     }
@@ -218,6 +229,8 @@ function keyDownHandler(e) {
 
 // Handle keyup event
 function keyUpHandler(e) {
+
+    // Check if particular keys are not pressed
     if(e.keyCode == 39) {
         rightPressed = false;
     }
